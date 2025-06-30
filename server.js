@@ -1,14 +1,14 @@
-// server.js
-import { Server } from "socket.io";
-import { createServer } from "http";
-import express from "express";
-import cors from "cors";
+const express = require("express");
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+const cors = require("cors");
 
 const app = express();
 const httpServer = createServer(app);
+
 const io = new Server(httpServer, {
   cors: {
-    origin: "*", // yoki "https://your-vercel-app.vercel.app"
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
@@ -33,4 +33,4 @@ io.on("connection", (socket) => {
 });
 
 const PORT = process.env.PORT || 3001;
-httpServer.listen(PORT, () => console.log(`✅ Server started on ${PORT}`));
+httpServer.listen(PORT, () => console.log(`✅ Server started on port ${PORT}`));
