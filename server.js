@@ -6,14 +6,20 @@ const cors = require("cors");
 const app = express();
 const httpServer = createServer(app);
 
+// Agar kerak bo‘lsa statik fayllar uchun, misol uchun:
+// app.use(express.static("public"));
+
 const io = new Server(httpServer, {
   cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-  },
+    origin: "*", // yoki domeningiz: "https://yourapp.vercel.app"
+    methods: ["GET", "POST"]
+  }
 });
 
+// WebSocket hodisalarini boshqaramiz
 io.on("connection", (socket) => {
+  console.log("🚀 Yangi socket bog‘landi:", socket.id);
+
   socket.on("join-room", (roomId, userId) => {
     socket.join(roomId);
     socket.to(roomId).emit("user-connected", userId);
@@ -21,7 +27,6 @@ io.on("connection", (socket) => {
     socket.on("toggle-camera", (data) => {
       socket.to(roomId).emit("toggle-camera", data);
     });
-
     socket.on("toggle-mic", (data) => {
       socket.to(roomId).emit("toggle-mic", data);
     });
